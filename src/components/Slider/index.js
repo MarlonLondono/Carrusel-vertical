@@ -6,7 +6,7 @@ const Slider = ({ children }) => {
   const [prev, setPrev] = useState(true);
   const [arrayImages, setArrayImages] = useState([]);
   const Quantity = 2;
-  console.log(children.length);
+  console.log(positionActual);
 
   useEffect(() => {
     if (children) {
@@ -18,30 +18,30 @@ const Slider = ({ children }) => {
     }
   }, []);
 
-  const NextPage = () => {
-    arrayImages.shift();
-    if (positionActual === children.length - 3) {
+  useEffect(() => {
+    if (positionActual === children.length - 2) {
       setLimit(true);
     } else {
       setLimit(false);
-      setPrev(false);
-      setPositionActual(positionActual + 1);
     }
-    arrayImages.push(arrayImages[arrayImages.length - 1] + 1);
-    console.log(arrayImages);
-    console.log(positionActual);
-    console.log(limit);
-  };
-
-  const PreviewPage = () => {
-    arrayImages.pop();
     if (positionActual === 1) {
       setPrev(true);
     } else {
       setPrev(false);
-      setLimit(false);
-      setPositionActual(positionActual - 1);
     }
+  }, [positionActual, setPositionActual]);
+
+  const NextPage = () => {
+    arrayImages.shift();
+    setPositionActual(positionActual + 1);
+    arrayImages.push(arrayImages[arrayImages.length - 1] + 1);
+    console.log(arrayImages);
+    console.log(positionActual);
+  };
+
+  const PreviewPage = () => {
+    arrayImages.pop();
+    setPositionActual(positionActual - 1);
     arrayImages.unshift(arrayImages[0] - 1);
     console.log(arrayImages);
     console.log(positionActual);
@@ -49,7 +49,14 @@ const Slider = ({ children }) => {
 
   const imagesChildren = children.map((child, index) => {
     if (arrayImages.includes(index)) {
-      return <li key={index}>{child}</li>;
+      return (
+        <li
+          style={{ borderWidth: 1, borderColor: "#000", borderStyle: "solid" }}
+          key={index}
+        >
+          {child}
+        </li>
+      );
     }
   });
 
